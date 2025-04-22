@@ -14,7 +14,7 @@ export async function login(
     return { message: "Please fill in all fields." }
   }
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  const emailRegex = /^[^\s@]+@zod\.com$/
   if (!emailRegex.test(email)) {
     return { message: "Please enter a valid email address." }
   }
@@ -23,9 +23,16 @@ export async function login(
   if (!usernameRegex.test(username)) {
     return { message: "Username can only contain letters and numbers." }
   }
+  if (username.length < 5) {
+    return { message: "Username must be at least 5 characters long." }
+  }
 
-  if (password !== "12345") {
-    return { message: "Invalid password." }
+  if (password.length < 10) {
+    return { message: "Password must be at least 10 characters long." }
+  }
+  const passwordNumberRegex = /\d/
+  if (!passwordNumberRegex.test(password)) {
+    return { message: "Password must contain at least one number." }
   }
 
   redirect("/dashboard")
