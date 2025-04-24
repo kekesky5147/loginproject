@@ -1,0 +1,42 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/client" // Prisma Client 출력 경로 지정
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./database.db"
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  username   String   @unique
+  password   String
+  email      String   @unique
+  bio        String?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  tweets     Tweet[]  @relation("UserTweets")
+  likes      Like[]   @relation("UserLikes")
+}
+
+model Tweet {
+  id         Int      @id @default(autoincrement())
+  tweet      String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  user       User     @relation("UserTweets", fields: [userId], references: [id])
+  userId     Int
+  likes      Like[]   @relation("TweetLikes")
+}
+
+model Like {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  user       User     @relation("UserLikes", fields: [userId], references: [id])
+  userId     Int
+  tweet      Tweet    @relation("TweetLikes", fields: [tweetId], references: [id])
+  tweetId    Int
+
+  @@unique([userId, tweetId])
+}
