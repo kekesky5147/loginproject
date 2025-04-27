@@ -1,4 +1,11 @@
+// src/app/layout.tsx
+import type { Metadata } from 'next'
 import './globals.css'
+
+export const metadata: Metadata = {
+  title: 'Login Project',
+  description: '회원가입 및 로그인 데모'
+}
 
 export default function RootLayout ({
   children
@@ -7,11 +14,7 @@ export default function RootLayout ({
 }) {
   return (
     <html lang='ko'>
-      <head>
-        <meta charSet='utf-8' />
-        <meta name='viewport' content='width=device-width, initial-scale=1' />
-      </head>
-      <body className='min-h-screen bg-white'>{children}</body>
+      <body className='bg-gray-100'>{children}</body>
     </html>
   )
 }

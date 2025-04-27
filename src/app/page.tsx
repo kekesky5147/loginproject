@@ -1,27 +1,26 @@
+'use client'
+
+// src/app/page.tsx
 import Link from 'next/link'
 
 export default function HomePage () {
   return (
-    <div className='flex min-h-screen items-center justify-center bg-gray-100'>
-      <div className='bg-white p-6 rounded shadow-md w-full max-w-md'>
-        <h1 className='flex items-center justify-center text-2xl font-bold mb-4'>
-          W E L C O M E !
-        </h1>
-        <p className='flex items-center justify-center mb-4 text-gray-700'>
-          계정이 있으시면 로그인하거나, 새 계정을 생성하세요.
-        </p>
-        <div className='flex flex-col gap-2'>
-          <Link
-            href='/log-in'
-            className='w-full bg-red-500 text-white p-2 rounded-md text-center hover:bg-red-600 focus:outline-none focus:ring-2 '
-          >
-            Log in
-          </Link>
+    <div className='flex justify-center items-center min-h-screen bg-gray-100'>
+      <div className='w-full max-w-md p-6 bg-white rounded-lg shadow-md text-center'>
+        <h1 className='text-2xl font-bold mb-6'>홈페이지</h1>
+        <p className='mb-4'>환영합니다! 아래 링크로 이동하세요.</p>
+        <div className='space-y-2'>
           <Link
             href='/create-account'
-            className='w-full bg-green-500 text-white p-2 rounded-md text-center hover:bg-green-600 focus:outline-none focus:ring-2 '
+            className='block text-blue-600 hover:underline'
           >
-            Create Account
+            회원가입
+          </Link>
+          <Link href='/log-in' className='block text-blue-600 hover:underline'>
+            로그인
+          </Link>
+          <Link href='/profile' className='block text-blue-600 hover:underline'>
+            프로필
           </Link>
         </div>
       </div>
