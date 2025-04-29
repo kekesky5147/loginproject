@@ -1,9 +1,12 @@
 // src/app/layout.tsx
 import type { Metadata } from 'next'
-import './globals.css'
+import './globals.css' // if globals.css is located in src/app/
 
 export const metadata: Metadata = {
-  title: 'Login Project',
+  title: {
+    template: 'Login Project',
+    default: 'Log-in'
+  },
   description: '회원가입 및 로그인 데모'
 }
 

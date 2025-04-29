@@ -4,6 +4,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { getCurrentUser } from '@/lib/auth-actions'
+import TabBar from '@/components/tab-bar'
 
 export default function ProfilePage () {
   const [user, setUser] = useState<{ email: string; nickname: string } | null>(

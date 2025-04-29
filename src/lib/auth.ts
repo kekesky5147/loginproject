@@ -1,6 +1,6 @@
 import { sealData, unsealData } from "iron-session"
 import bcrypt from "bcrypt"
-import prisma from "./prisma"
+import { prisma } from "./prisma"
 import { createAccountSchema, loginSchema } from "./zodSchemas"
 import { ZodFormattedError } from "zod"
 
