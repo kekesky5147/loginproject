@@ -103,7 +103,7 @@ export default function LoginPage () {
 
           <button
             type='submit'
-            className='w-full p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600'
+            className='w-full p-2 bg-red-500 text-white rounded-md hover:bg-red-600'
           >
             로그인
           </button>

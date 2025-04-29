@@ -12,7 +12,7 @@ export default function HomePage () {
         <div className='space-y-2'>
           <Link
             href='/create-account'
-            className='block text-blue-600 hover:underline'
+            className='block text-blue-600 hover:underline '
           >
             회원가입
           </Link>
