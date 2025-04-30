@@ -1,4 +1,3 @@
-// /src/app/api/tweets/route.ts
 import { prisma } from "@/lib/prisma"
 import { getSession } from "@/lib/auth"
 import { cookies } from "next/headers"
@@ -6,7 +5,6 @@ import { NextResponse } from "next/server"
 
 // GET - 트윗 리스트 조회
 export async function GET(req: Request) {
-  // 쿼리 파라미터로 페이지 번호를 받아와서 해당 페이지의 트윗을 가져옴
   const { searchParams } = new URL(req.url)
   const page = parseInt(searchParams.get("page") || "1", 10)
   const pageSize = 5
@@ -30,8 +28,9 @@ export async function GET(req: Request) {
 
 // POST - 트윗 작성
 export async function POST(req: Request) {
-  const cookieStore = await cookies() // 비동기적으로 쿠키 가져오기
-  const sessionCookie = cookieStore.get("session")?.value
+  // 비동기적으로 쿠키를 가져오는 부분에 await 추가
+  const cookieStore = cookies()
+  const sessionCookie = (await cookieStore).get("session")?.value
   const user = await getSession(sessionCookie)
 
   if (!user) {

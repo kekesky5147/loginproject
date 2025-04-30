@@ -110,13 +110,16 @@ export async function getSession(
   session: string | undefined
 ): Promise<{ userId: number } | null> {
   if (!session) return null
+
   try {
     const data = await unsealData<{ userId: number }>(session, {
       password: SESSION_SECRET,
     })
+    console.log("세션 데이터:", data) // 세션 데이터 확인
     if (!data || typeof data.userId !== "number") return null
     return { userId: data.userId }
-  } catch {
+  } catch (error) {
+    console.error("세션 오류:", error) // 오류 로그 추가
     return null
   }
 }

@@ -2,8 +2,21 @@
 
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import TweetForm from '@/components/tweet-form'
 
-export default function TweetList () {
+export default function TweetPage () {
+  return (
+    <main className='min-h-screen bg-gray-100 py-8'>
+      <div className='container mx-auto px-4'>
+        <h1 className='text-2xl font-bold mb-6'>트윗 페이지</h1>
+        <TweetForm />
+        <TweetList />
+      </div>
+    </main>
+  )
+}
+
+function TweetList () {
   const [tweets, setTweets] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -41,7 +54,7 @@ export default function TweetList () {
 
   return (
     <div className='max-w-xl mx-auto py-6'>
-      <h1 className='text-2xl font-bold mb-4 text-center'>트윗 목록</h1>
+      <h2 className='text-xl font-semibold mb-4 text-center'>트윗 목록</h2>
 
       <ul className='space-y-4'>
         {tweets.map(tweet => (
