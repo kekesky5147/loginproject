@@ -1,15 +1,15 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 
 export default function TweetForm () {
   const [content, setContent] = useState('')
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
+  async function handleSubmit (event: React.FormEvent) {
+    event.preventDefault()
     setError('')
     setSuccess(false)
 
@@ -17,11 +17,17 @@ export default function TweetForm () {
       // 세션 체크
       const sessionRes = await fetch('/api/auth/session', {
         method: 'GET',
-        credentials: 'include' // ✅ 쿠키 포함
+        credentials: 'include'
       })
 
       if (!sessionRes.ok) {
         setError('로그인이 필요합니다.')
+        return
+      }
+
+      const session = await sessionRes.json()
+      if (!session.userId) {
+        setError('사용자 정보를 가져올 수 없습니다.')
         return
       }
 
@@ -31,8 +37,8 @@ export default function TweetForm () {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ content }),
-        credentials: 'include' // ✅ 쿠키 포함
+        body: JSON.stringify({ content, userId: session.userId }),
+        credentials: 'include'
       })
 
       if (!res.ok) {
@@ -45,6 +51,7 @@ export default function TweetForm () {
       setSuccess(true)
     } catch (err) {
       setError('서버 오류가 발생했습니다.')
+      console.error('handleSubmit 오류:', err)
     }
   }
 
@@ -63,7 +70,19 @@ export default function TweetForm () {
       >
         트윗하기
       </button>
-      {error && <p className='mt-2 text-red-500'>{error}</p>}
+      {error && (
+        <p className='mt-2 text-red-500'>
+          {error}
+          {error.includes('로그인') && (
+            <span>
+              {' '}
+              <Link href='/log-in' className='underline text-blue-500'>
+                로그인
+              </Link>
+            </span>
+          )}
+        </p>
+      )}
       {success && (
         <p className='mt-2 text-green-500'>트윗이 성공적으로 작성되었습니다!</p>
       )}

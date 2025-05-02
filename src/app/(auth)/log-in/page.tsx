@@ -1,6 +1,5 @@
 'use client'
 
-// src/app/log-in/page.tsx
 import { useState, useEffect } from 'react'
 import { useFormState } from 'react-dom'
 import { LoginFormState, handleLogin } from '@/lib/auth-actions'
@@ -9,7 +8,8 @@ import { useRouter } from 'next/navigation'
 const initialState: LoginFormState = {
   email: '',
   password: '',
-  session: false
+  session: false,
+  errors: undefined
 }
 
 export default function LoginPage () {
@@ -24,22 +24,17 @@ export default function LoginPage () {
 
   // 로그인 성공 시 프로필 페이지로 이동
   useEffect(() => {
-    if (
-      state.session &&
-      state.errors &&
-      Object.keys(state.errors).length === 0
-    ) {
-      localStorage.setItem('currentUser', formState.email)
+    if (state.session && !state.errors) {
       router.push('/profile')
     }
-  }, [state.session, state.errors, formState.email, router])
+  }, [state.session, state.errors, router])
 
   return (
     <div className='flex justify-center items-center min-h-screen bg-gray-100'>
       <div className='w-full max-w-md p-6 bg-white rounded-lg shadow-md relative'>
         <button
           onClick={() => router.push('/')}
-          className='absolute top-4 left-4  text-gray-700 px-3 py-1 rounded-md '
+          className='absolute top-4 left-4 text-gray-700 px-3 py-1 rounded-md'
         >
           Home
         </button>
@@ -88,17 +83,8 @@ export default function LoginPage () {
             )}
           </div>
 
-          {state.session &&
-            state.errors &&
-            Object.keys(state.errors).length === 0 && (
-              <p className='text-green-500 text-sm mb-4'>
-                로그인 성공! 프로필로 이동합니다.
-              </p>
-            )}
-          {state.errors && Object.keys(state.errors).length > 0 && (
-            <p className='text-red-500 text-sm mb-4'>
-              로그인 실패. 입력을 확인하세요.
-            </p>
+          {state.errors?._form && (
+            <p className='text-red-500 text-sm mb-4'>{state.errors._form}</p>
           )}
 
           <button

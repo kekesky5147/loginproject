@@ -16,14 +16,14 @@ model User {
   updatedAt DateTime @updatedAt
   tweets    Tweet[]
   likes     Like[]
-  // Product   Product[]
+  posts     Post[] // Post 모델과의 관계 추가
 }
 
 model Tweet {
   id        Int      @id @default(autoincrement())
   content   String
   userId    Int
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   likes     Like[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -33,17 +33,18 @@ model Like {
   id        Int      @id @default(autoincrement())
   userId    Int
   tweetId   Int
-  user      User     @relation(fields: [userId], references: [id])
-  tweet     Tweet    @relation(fields: [tweetId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tweet     Tweet    @relation(fields: [tweetId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
 }
 
-// model Product {
-//   id        Int      @id @default(autoincrement())
-//   user      User     @relation(fields: [userId], references: [id])
-//   title     String
-//   price     Float
-//   create_at DateTime @default(now())
-//   update_at DateTime @updatedAt
-//   userId    Int
-// }
+model Post {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  views       Int      @default(0)
+  createdAt   DateTime @default(now()) // 필드명 일관성을 위해 created_at → createdAt
+  updatedAt   DateTime @updatedAt // 필드명 일관성을 위해 updated_at → updatedAt
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      Int
+}

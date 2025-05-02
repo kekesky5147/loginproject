@@ -1,12 +1,9 @@
-// /src/app/api/tweets/route.ts
 import { prisma } from "@/lib/prisma"
 import { getSession } from "@/lib/auth"
 import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
 
-// GET - 트윗 리스트 조회
 export async function GET(req: Request) {
-  // 쿼리 파라미터로 페이지 번호를 받아와서 해당 페이지의 트윗을 가져옴
   const { searchParams } = new URL(req.url)
   const page = parseInt(searchParams.get("page") || "1", 10)
   const pageSize = 5
@@ -28,9 +25,8 @@ export async function GET(req: Request) {
   return NextResponse.json({ tweets, totalPages })
 }
 
-// POST - 트윗 작성
 export async function POST(req: Request) {
-  const cookieStore = await cookies() // 비동기적으로 쿠키 가져오기
+  const cookieStore = await cookies()
   const sessionCookie = cookieStore.get("session")?.value
   const user = await getSession(sessionCookie)
 
@@ -42,20 +38,26 @@ export async function POST(req: Request) {
   }
 
   try {
-    const body = await req.json()
-    const { content } = body
+    const { content, userId } = await req.json()
 
-    if (!content) {
+    if (!content || !userId) {
       return NextResponse.json(
-        { error: "내용이 비어있습니다." },
+        { error: "내용 또는 사용자 ID가 비어있습니다." },
         { status: 400 }
+      )
+    }
+
+    if (user.userId !== parseInt(userId)) {
+      return NextResponse.json(
+        { error: "권한이 없는 사용자입니다." },
+        { status: 403 }
       )
     }
 
     const tweet = await prisma.tweet.create({
       data: {
         content,
-        userId: user.userId,
+        userId: parseInt(userId),
       },
     })
 
